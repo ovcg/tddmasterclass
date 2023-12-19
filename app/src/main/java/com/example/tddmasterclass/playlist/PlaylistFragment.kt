@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import com.example.tddmasterclass.PlaylistAPI
+import com.example.tddmasterclass.PlaylistService
 import com.example.tddmasterclass.R
 
 class PlaylistFragment : Fragment() {
@@ -45,7 +47,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        viewModelFactory = PlaylistViewModelFactory(PlaylistRepository())
+        //viewModelFactory = PlaylistViewModelFactory(PlaylistRepository(PlaylistService(PlaylistAPI())))
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistViewModel::class.java]
     }
 
