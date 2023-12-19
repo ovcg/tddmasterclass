@@ -1,4 +1,4 @@
-package com.example.tddmasterclass
+package com.example.tddmasterclass.playlist
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import com.example.tddmasterclass.R
 
 class PlaylistFragment : Fragment() {
 
@@ -26,7 +27,7 @@ class PlaylistFragment : Fragment() {
 
         viewModel.playlists.observe(this as LifecycleOwner) { playlists ->
             if (playlists.getOrNull() != null) {
-                setupList(view, playlists)
+                setupList(view, playlists.getOrNull()!!)
             }
 
         }
@@ -44,7 +45,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        viewModelFactory = PlaylistViewModelFactory()
+        viewModelFactory = PlaylistViewModelFactory(PlaylistRepository())
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistViewModel::class.java]
     }
 

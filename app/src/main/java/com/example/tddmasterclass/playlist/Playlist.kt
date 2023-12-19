@@ -1,4 +1,6 @@
-package com.example.tddmasterclass
+package com.example.tddmasterclass.playlist
+
+import com.example.tddmasterclass.R
 
 data class Playlist(
     val id: String,

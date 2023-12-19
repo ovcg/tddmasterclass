@@ -1,4 +1,4 @@
-package com.example.tddmasterclass
+package com.example.tddmasterclass.playlist
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
