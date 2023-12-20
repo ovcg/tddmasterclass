@@ -9,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import com.example.tddmasterclass.PlaylistAPI
-import com.example.tddmasterclass.PlaylistService
 import com.example.tddmasterclass.R
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

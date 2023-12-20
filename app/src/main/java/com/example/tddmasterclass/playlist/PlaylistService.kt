@@ -1,6 +1,5 @@
-package com.example.tddmasterclass
+package com.example.tddmasterclass.playlist
 
-import com.example.tddmasterclass.playlist.Playlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

@@ -1,4 +1,4 @@
-package com.example.tddmasterclass
+package com.example.tddmasterclass.playlist
 
 import com.example.tddmasterclass.playlist.Playlist
 import retrofit2.http.GET
