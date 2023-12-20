@@ -12,12 +12,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tddmasterclass.PlaylistAPI
 import com.example.tddmasterclass.PlaylistService
 import com.example.tddmasterclass.R
+import retrofit2.Retrofit
 
 class PlaylistFragment : Fragment() {
 
-
     private lateinit var viewModel: PlaylistViewModel
     private lateinit var viewModelFactory: PlaylistViewModelFactory
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("http://192.168.")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

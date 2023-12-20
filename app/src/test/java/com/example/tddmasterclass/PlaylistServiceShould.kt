@@ -32,10 +32,30 @@ class PlaylistServiceShould : BaseUnitTest() {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun convertValuesToFlowResultAndEmitsThem() = runBlockingTest {
+        mockSuccessfulCase()
+
+        assertEquals(Result.success(playlists), service.fetchPlaylists().first())
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun emitsErrorResultWhenNetworkFails() = runBlockingTest {
+
+        mockErrorCase()
+
+        assertEquals("Something went wrong",
+            service.fetchPlaylists().first().exceptionOrNull()?.message)
+    }
+
+    private fun mockErrorCase() {
+        `when`(api.fetchAllPlaylists()).thenThrow(exception)
+
+        service = PlaylistService(api)
+    }
+
+    private fun mockSuccessfulCase() {
         `when`(api.fetchAllPlaylists()).thenReturn(playlists)
 
         service = PlaylistService(api)
-
-        assertEquals(Result.success(playlists), service.fetchPlaylists().first())
     }
 }
