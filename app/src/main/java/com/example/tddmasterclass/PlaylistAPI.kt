@@ -1,8 +1,10 @@
 package com.example.tddmasterclass
 
 import com.example.tddmasterclass.playlist.Playlist
+import retrofit2.http.GET
 
 interface PlaylistAPI {
 
-    fun fetchAllPlaylists(): List<Playlist>
+    @GET("playlists")
+    suspend fun fetchAllPlaylists(): List<Playlist>
 }

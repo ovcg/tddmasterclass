@@ -5,6 +5,7 @@ import com.example.tddmasterclass.playlist.PlaylistRepository
 import com.example.tddmasterclass.playlist.PlaylistViewModel
 import com.example.tddmasterclass.utils.BaseUnitTest
 import com.example.tddmasterclass.utils.getValueForTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
@@ -30,6 +31,7 @@ class PlaylistViewModelShould : BaseUnitTest() {
         verify(repository, times(1)).getPlaylists()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun emitsPlaylistsFromRepository() = runBlockingTest {
         val viewModel = mockSuccessfulCase()

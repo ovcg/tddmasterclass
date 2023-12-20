@@ -11,7 +11,7 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.times
 import org.mockito.Mockito.`when`
-import org.mockito.kotlin.verify
+import org.mockito.Mockito.verify
 
 class PlaylistRepositoryShould : BaseUnitTest() {
 
@@ -20,7 +20,7 @@ class PlaylistRepositoryShould : BaseUnitTest() {
     private val exception = RuntimeException("Something went wrong")
 
     @Test
-    fun getPlaylistsFromService() = runBlockingTest{
+    fun getPlaylistsFromService() = runBlockingTest {
         val repository = PlaylistRepository(service)
 
         repository.getPlaylists()

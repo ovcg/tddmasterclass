@@ -2,15 +2,15 @@ package com.example.tddmasterclass
 
 import com.example.tddmasterclass.playlist.Playlist
 import com.example.tddmasterclass.utils.BaseUnitTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.mockito.Mockito.times
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.times
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 
 class PlaylistServiceShould : BaseUnitTest() {
 
@@ -19,17 +19,6 @@ class PlaylistServiceShould : BaseUnitTest() {
     private val playlists: List<Playlist> = mock()
     private val exception = RuntimeException("Something went wrong")
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun fetchAllPlaylistsFromApi() = runBlockingTest {
-        service = PlaylistService(api)
-
-        service.fetchPlaylists()
-
-        verify(api, times(1)).fetchAllPlaylists()
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun convertValuesToFlowResultAndEmitsThem() = runBlockingTest {
         mockSuccessfulCase()
@@ -37,7 +26,6 @@ class PlaylistServiceShould : BaseUnitTest() {
         assertEquals(Result.success(playlists), service.fetchPlaylists().first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun emitsErrorResultWhenNetworkFails() = runBlockingTest {
 
@@ -47,13 +35,13 @@ class PlaylistServiceShould : BaseUnitTest() {
             service.fetchPlaylists().first().exceptionOrNull()?.message)
     }
 
-    private fun mockErrorCase() {
+    private suspend fun mockErrorCase() {
         `when`(api.fetchAllPlaylists()).thenThrow(exception)
 
         service = PlaylistService(api)
     }
 
-    private fun mockSuccessfulCase() {
+    private suspend fun mockSuccessfulCase() {
         `when`(api.fetchAllPlaylists()).thenReturn(playlists)
 
         service = PlaylistService(api)

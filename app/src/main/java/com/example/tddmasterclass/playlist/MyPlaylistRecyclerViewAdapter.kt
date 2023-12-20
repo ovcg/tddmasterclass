@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.tddmasterclass.R
 
 import com.example.tddmasterclass.databinding.FragmentPlaylistBinding
 
@@ -26,9 +27,9 @@ class MyPlaylistRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.playlistName.text = item.id
+        holder.playlistName.text = item.name
         holder.playlistCategory.text = item.category
-        holder.playlistImage.setImageResource(item.image)
+        holder.playlistImage.setImageResource(R.mipmap.playlist)
     }
 
     override fun getItemCount(): Int = values.size

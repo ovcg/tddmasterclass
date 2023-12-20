@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tddmasterclass.PlaylistAPI
 import com.example.tddmasterclass.PlaylistService
 import com.example.tddmasterclass.R
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class PlaylistFragment : Fragment() {
 
@@ -20,7 +22,16 @@ class PlaylistFragment : Fragment() {
     private lateinit var viewModelFactory: PlaylistViewModelFactory
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.")
+        .baseUrl("http://192.168.15.82:3001/")
+        .client(OkHttpClient())
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val api = retrofit.create(PlaylistAPI::class.java)
+
+    private val service = PlaylistService(api)
+
+    private val repository = PlaylistRepository(service)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,16 +61,13 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        //viewModelFactory = PlaylistViewModelFactory(PlaylistRepository(PlaylistService(PlaylistAPI())))
+        viewModelFactory = PlaylistViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistViewModel::class.java]
     }
-
 
     companion object {
         @JvmStatic
         fun newInstance() =
-            PlaylistFragment().apply {
-
-            }
+            PlaylistFragment().apply {}
     }
 }
