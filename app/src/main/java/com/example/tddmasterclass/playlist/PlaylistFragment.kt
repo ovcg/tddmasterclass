@@ -10,22 +10,18 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.example.tddmasterclass.R
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PlaylistFragment : Fragment() {
 
+    @Inject
     private lateinit var viewModel: PlaylistViewModel
     private lateinit var viewModelFactory: PlaylistViewModelFactory
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.15.82:3001/")
-        .client(OkHttpClient())
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val api = retrofit.create(PlaylistAPI::class.java)
 
     private val service = PlaylistService(api)
 

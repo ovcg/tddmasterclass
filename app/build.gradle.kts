@@ -1,6 +1,10 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -51,11 +55,13 @@ android {
         viewBinding = true
     }
 }
+
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = "11"
     }
 }
+
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
     implementation("androidx.core:core-ktx:1.12.0")
@@ -73,6 +79,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     //tests
     testImplementation("junit:junit:4.13.2")
@@ -90,4 +98,8 @@ dependencies {
     androidTestImplementation("com.schibsted.spain:barista:3.6.0") {
         exclude( "org.jetbrains.kotlin")
     }
+}
+
+kapt {
+    correctErrorTypes = true
 }
