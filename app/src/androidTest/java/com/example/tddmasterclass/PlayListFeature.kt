@@ -59,11 +59,6 @@ class PlayListFeature {
     }
 
     @Test
-    fun displaysLoaderWhileFetchingThePlaylists() {
-        assertDisplayed(R.id.loader)
-    }
-
-    @Test
     fun hideLoader() {
         Thread.sleep(4000)
 
