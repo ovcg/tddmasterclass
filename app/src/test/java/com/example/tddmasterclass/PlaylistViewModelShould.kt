@@ -4,8 +4,8 @@ import com.example.tddmasterclass.playlist.Playlist
 import com.example.tddmasterclass.playlist.PlaylistRepository
 import com.example.tddmasterclass.playlist.PlaylistViewModel
 import com.example.tddmasterclass.utils.BaseUnitTest
+import com.example.tddmasterclass.utils.captureValues
 import com.example.tddmasterclass.utils.getValueForTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
@@ -31,7 +31,6 @@ class PlaylistViewModelShould : BaseUnitTest() {
         verify(repository, times(1)).getPlaylists()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun emitsPlaylistsFromRepository() = runBlockingTest {
         val viewModel = mockSuccessfulCase()
@@ -52,6 +51,17 @@ class PlaylistViewModelShould : BaseUnitTest() {
         val viewModel = PlaylistViewModel(repository)
 
         assertEquals(exception, viewModel.playlists.getValueForTest()?.exceptionOrNull()!!)
+    }
+
+    @Test
+    fun shouldSpinnerWhileLoading() = runBlockingTest {
+        val viewModel = mockSuccessfulCase()
+
+        viewModel.loader.captureValues {
+            viewModel.playlists.getValueForTest()
+
+            assertEquals(true, values[0])
+        }
     }
 
     private fun mockSuccessfulCase(): PlaylistViewModel {
