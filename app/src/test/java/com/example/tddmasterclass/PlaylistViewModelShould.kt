@@ -54,13 +54,24 @@ class PlaylistViewModelShould : BaseUnitTest() {
     }
 
     @Test
-    fun shouldSpinnerWhileLoading() = runBlockingTest {
+    fun showSpinnerWhileLoading() = runBlockingTest {
         val viewModel = mockSuccessfulCase()
 
         viewModel.loader.captureValues {
             viewModel.playlists.getValueForTest()
 
             assertEquals(true, values[0])
+        }
+    }
+
+    @Test
+    fun closeLoaderAfterPlaylistsLoad() = runBlockingTest{
+        val viewModel = mockSuccessfulCase()
+
+        viewModel.loader.captureValues {
+            viewModel.playlists.getValueForTest()
+
+            assertEquals(false, values.last())
         }
     }
 

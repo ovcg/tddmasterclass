@@ -31,9 +31,9 @@ class PlaylistFragment : Fragment() {
         setupViewModel()
 
         viewModel.loader.observe(this as LifecycleOwner) { loading ->
-           when (loading) {
-               true -> view.findViewById<ProgressBar>(R.id.loader).visibility = View.VISIBLE
-               else -> {}
+            view.findViewById<ProgressBar>(R.id.loader).visibility = when (loading) {
+               true ->  View.VISIBLE
+               else -> View.GONE
            }
 
         }
@@ -48,10 +48,10 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun setupList(
-        view: View?,
+        view: RecyclerView,
         playlists: List<Playlist>
     ) {
-        with(view as RecyclerView) {
+        with(view) {
             layoutManager = LinearLayoutManager(context)
             adapter = MyPlaylistRecyclerViewAdapter(playlists)
         }
