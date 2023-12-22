@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.idling.CountingIdlingResource
 import com.example.tddmasterclass.R
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class PlaylistFragment : Fragment() {
 
+    private lateinit var countingIdlingResource: CountingIdlingResource
     private lateinit var viewModel: PlaylistViewModel
 
     @Inject
@@ -55,6 +57,7 @@ class PlaylistFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = MyPlaylistRecyclerViewAdapter(playlists)
         }
+        countingIdlingResource.decrement()
     }
 
     private fun setupViewModel() {
@@ -63,7 +66,9 @@ class PlaylistFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() =
-            PlaylistFragment().apply {}
+        fun newInstance(countingIdlingResource: CountingIdlingResource) =
+            PlaylistFragment().apply {
+                this.countingIdlingResource = countingIdlingResource
+            }
     }
 }
