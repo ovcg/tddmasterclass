@@ -17,12 +17,14 @@ import org.mockito.Mockito.verify
 class PlaylistRepositoryShould : BaseUnitTest() {
 
     private val service: PlaylistService = mock()
+    private val mapper: PlaylistMapper = mock()
     private val playlists = mock<List<Playlist>>()
+    private val playlistsRaw = mock<List<PlaylistRaw>>()
     private val exception = RuntimeException("Something went wrong")
 
     @Test
     fun getPlaylistsFromService() = runBlockingTest {
-        val repository = PlaylistRepository(service)
+        val repository = mockSuccessfulCase()
 
         repository.getPlaylists()
 
@@ -30,7 +32,7 @@ class PlaylistRepositoryShould : BaseUnitTest() {
     }
 
     @Test
-    fun emitPlaylistsFromService() = runBlockingTest {
+    fun emitMappedPlaylistsFromService() = runBlockingTest {
         val repository =  mockSuccessfulCase()
 
         assertEquals(playlists, repository.getPlaylists().first().getOrNull())
@@ -38,20 +40,39 @@ class PlaylistRepositoryShould : BaseUnitTest() {
 
     @Test
     fun propagateErrors() = runBlockingTest {
-        `when`(service.fetchPlaylists()).thenReturn(
-            flow {
-                emit(Result.failure(exception))
-            }
-        )
+        val repository = mockFailureCase()
+
+        assertEquals(exception, repository.getPlaylists().first().exceptionOrNull())
+    }
+
+    @Test
+    fun delegateBusinessLogicToMapper() = runBlockingTest {
+        val repository = mockSuccessfulCase()
+
+        repository.getPlaylists()
+
+        verify(mapper, times(1)).invoke(playlistsRaw)
     }
 
     private suspend fun mockSuccessfulCase(): PlaylistRepository {
         `when`(service.fetchPlaylists()).thenReturn(
             flow {
-                emit(Result.success(playlists))
+                emit(Result.success(playlistsRaw))
             }
         )
 
-        return PlaylistRepository(service)
+        `when`(mapper.invoke(playlistsRaw)).thenReturn(playlists)
+
+        return PlaylistRepository(service, mapper)
+    }
+
+    private suspend fun mockFailureCase(): PlaylistRepository {
+        `when`(service.fetchPlaylists()).thenReturn(
+            flow {
+                emit(Result.failure(exception))
+            }
+        )
+
+        return PlaylistRepository(service, mapper)
     }
 }

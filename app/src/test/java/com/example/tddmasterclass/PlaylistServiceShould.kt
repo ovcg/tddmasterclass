@@ -1,6 +1,5 @@
 package com.example.tddmasterclass
 
-import com.example.tddmasterclass.playlist.Playlist
 import com.example.tddmasterclass.playlist.PlaylistAPI
 import com.example.tddmasterclass.playlist.PlaylistService
 import com.example.tddmasterclass.utils.BaseUnitTest
@@ -15,7 +14,7 @@ class PlaylistServiceShould : BaseUnitTest() {
 
     private lateinit var service: PlaylistService
     private val api: PlaylistAPI = mock()
-    private val playlists: List<Playlist> = mock()
+    private val playlists: List<PlaylistRaw> = mock()
     private val exception = RuntimeException("Something went wrong")
 
     @Test
