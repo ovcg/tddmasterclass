@@ -1,4 +1,4 @@
-package com.example.tddmasterclass
+package com.example.tddmasterclass.playlist
 
 data class PlaylistRaw(
     val id: String,

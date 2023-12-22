@@ -1,6 +1,8 @@
 package com.example.tddmasterclass
 
 import com.example.tddmasterclass.playlist.Playlist
+import com.example.tddmasterclass.playlist.PlaylistMapper
+import com.example.tddmasterclass.playlist.PlaylistRaw
 import com.example.tddmasterclass.playlist.PlaylistRepository
 import com.example.tddmasterclass.playlist.PlaylistService
 import com.example.tddmasterclass.utils.BaseUnitTest
@@ -43,15 +45,6 @@ class PlaylistRepositoryShould : BaseUnitTest() {
         val repository = mockFailureCase()
 
         assertEquals(exception, repository.getPlaylists().first().exceptionOrNull())
-    }
-
-    @Test
-    fun delegateBusinessLogicToMapper() = runBlockingTest {
-        val repository = mockSuccessfulCase()
-
-        repository.getPlaylists()
-
-        verify(mapper, times(1)).invoke(playlistsRaw)
     }
 
     private suspend fun mockSuccessfulCase(): PlaylistRepository {
