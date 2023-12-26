@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -33,24 +34,34 @@ class PlaylistDetailFragment : Fragment() {
 
         val id = args.playlistid
 
-        TestIdlingResource.increment()
-
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistDetailsViewModel::class.java]
 
-        observeLiveData(view)
+        observePlaylistDetails(view)
+
+        observeLoader(view)
 
         viewModel.getPlaylistDetails(id)
 
         return view
     }
 
-    private fun observeLiveData(view: View) {
+    private fun observePlaylistDetails(view: View) {
         viewModel.playlistDetails.observe(this as LifecycleOwner) { playlistDetails ->
             if (playlistDetails.getOrNull() != null) {
                 view.findViewById<TextView>(R.id.playlist_name).text =
                     playlistDetails.getOrNull()!!.name
                 view.findViewById<TextView>(R.id.playlist_details).text =
                     playlistDetails.getOrNull()!!.details
+            }
+        }
+    }
+
+    private fun observeLoader(view: View) {
+        viewModel.loader.observe(this as LifecycleOwner) { load ->
+            view.findViewById<ProgressBar>(R.id.details_loader).visibility = if (load) {
+                View.VISIBLE
+            } else {
+                View.GONE
             }
         }
     }

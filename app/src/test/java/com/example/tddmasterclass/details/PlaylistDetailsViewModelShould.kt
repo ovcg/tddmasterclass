@@ -1,6 +1,7 @@
 package com.example.tddmasterclass.details
 
 import com.example.tddmasterclass.utils.BaseUnitTest
+import com.example.tddmasterclass.utils.captureValues
 import com.example.tddmasterclass.utils.getValueForTest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
@@ -14,7 +15,6 @@ import org.mockito.Mockito.`when`
 class PlaylistDetailsViewModelShould : BaseUnitTest() {
 
     private val service: PlaylistDetailsService = mock()
-    private lateinit var viewModel: PlaylistDetailsViewModel
     private val id = "1"
     private val playlistDetails: PlaylistDetails = mock()
     private val expected = Result.success(playlistDetails)
@@ -23,7 +23,8 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
 
     @Test
     fun getPlaylistDetailsFromService() = runBlockingTest {
-        mockSuccessfulCase()
+        val viewModel = mockSuccessfulCase()
+        viewModel.getPlaylistDetails(id)
 
         verify(service, times(1)).fetchPlaylistDetails(id)
     }
@@ -31,39 +32,61 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
 
     @Test
     fun emitsPlaylistDetailsFromService() = runBlockingTest {
-        mockSuccessfulCase()
+        val viewModel = mockSuccessfulCase()
+
+        viewModel.getPlaylistDetails(id)
 
         assertEquals(expected, viewModel.playlistDetails.getValueForTest())
     }
 
     @Test
     fun emitErrorWhenServiceFails() = runBlockingTest {
-        mockErrorCase()
+        val viewModel = mockErrorCase()
 
+        viewModel.getPlaylistDetails(id)
         assertEquals(error, viewModel.playlistDetails.getValueForTest())
     }
 
-    private suspend fun mockSuccessfulCase() {
+    @Test
+    fun showSpinnerWhileLoading() = runBlockingTest {
+        val viewModel = mockSuccessfulCase()
+
+        viewModel.getPlaylistDetails(id)
+
+        viewModel.loader.captureValues {
+            viewModel.playlistDetails.getValueForTest()
+            assertEquals(true, values[0])
+        }
+    }
+
+    @Test
+    fun closeLoaderAfterPlaylistDetailsLoad() = runBlockingTest {
+        val viewModel = mockSuccessfulCase()
+
+        viewModel.getPlaylistDetails(id)
+
+        viewModel.loader.captureValues {
+            assertEquals(false, values.last())
+        }
+    }
+
+    private suspend fun mockSuccessfulCase(): PlaylistDetailsViewModel {
         `when`(service.fetchPlaylistDetails(id)).thenReturn(
             flow {
                 emit(Result.success(playlistDetails))
             }
         )
 
-        viewModel = PlaylistDetailsViewModel(service)
-
-        viewModel.getPlaylistDetails(id)
+        return PlaylistDetailsViewModel(service)
     }
 
-    private suspend fun mockErrorCase() {
+    private suspend fun mockErrorCase(): PlaylistDetailsViewModel {
         `when`(service.fetchPlaylistDetails(id)).thenReturn(
             flow {
                 emit(error)
             }
         )
 
-        viewModel = PlaylistDetailsViewModel(service)
-
-        viewModel.getPlaylistDetails(id)
+        return PlaylistDetailsViewModel(service)
     }
 }
