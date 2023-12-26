@@ -15,7 +15,7 @@ import org.mockito.Mockito.`when`
 
 class PlaylistDetailsServiceShould : BaseUnitTest() {
 
-    lateinit var service: PlaylistDetailsService
+    private lateinit var service: PlaylistDetailsService
     private val id = "100"
     private val api: PlaylistDetailsAPI = mock()
     private val playlistDetails: PlaylistDetails = mock()
