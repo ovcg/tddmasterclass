@@ -1,4 +1,4 @@
-package com.example.tddmasterclass
+package com.example.tddmasterclass.playlist
 
 import com.example.tddmasterclass.playlist.PlaylistAPI
 import com.example.tddmasterclass.playlist.PlaylistRaw

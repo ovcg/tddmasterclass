@@ -1,8 +1,5 @@
-package com.example.tddmasterclass
+package com.example.tddmasterclass.playlist
 
-import com.example.tddmasterclass.playlist.Playlist
-import com.example.tddmasterclass.playlist.PlaylistRepository
-import com.example.tddmasterclass.playlist.PlaylistViewModel
 import com.example.tddmasterclass.utils.BaseUnitTest
 import com.example.tddmasterclass.utils.captureValues
 import com.example.tddmasterclass.utils.getValueForTest
@@ -70,7 +67,7 @@ class PlaylistViewModelShould : BaseUnitTest() {
         runBlocking {
             Mockito.`when`(repository.getPlaylists()).thenReturn(
                 flow {
-                    emit(Result.failure<List<Playlist>>(exception))
+                    emit(Result.failure(exception))
                 }
             )
         }

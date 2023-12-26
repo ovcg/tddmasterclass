@@ -2,11 +2,11 @@ package com.example.tddmasterclass
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
+import com.example.tddmasterclass.utils.TestIdlingResource
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -14,7 +14,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
-
 
 @RunWith(AndroidJUnit4::class)
 abstract class BaseUITest {
@@ -25,13 +24,8 @@ abstract class BaseUITest {
 
     @Before
     open fun registerIdlingResource() {
-        val activityScenario = ActivityScenario.launch(MainActivity::class.java)
-
-        activityScenario.onActivity{ activity ->
-            signInIdlingResource = activity.countingIdle
-            // To prove that the test fails, omit this call:
-            IdlingRegistry.getInstance().register(signInIdlingResource)
-        }
+        signInIdlingResource = TestIdlingResource.countingIdlingResource
+        IdlingRegistry.getInstance().register(signInIdlingResource)
     }
 
     @After

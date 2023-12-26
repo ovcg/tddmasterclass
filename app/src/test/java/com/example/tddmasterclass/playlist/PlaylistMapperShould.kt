@@ -1,7 +1,6 @@
-package com.example.tddmasterclass
+package com.example.tddmasterclass.playlist
 
-import com.example.tddmasterclass.playlist.PlaylistMapper
-import com.example.tddmasterclass.playlist.PlaylistRaw
+import com.example.tddmasterclass.R
 import com.example.tddmasterclass.utils.BaseUnitTest
 import org.junit.Assert.assertEquals
 import org.junit.Test

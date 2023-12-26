@@ -8,17 +8,17 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.idling.CountingIdlingResource
 import com.example.tddmasterclass.R
+import com.example.tddmasterclass.utils.TestIdlingResource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class PlaylistFragment : Fragment() {
 
-    private lateinit var countingIdlingResource: CountingIdlingResource
     private lateinit var viewModel: PlaylistViewModel
 
     @Inject
@@ -31,7 +31,8 @@ class PlaylistFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_playlist_list, container, false)
 
         setupViewModel()
-
+        setupObservers(view)
+        TestIdlingResource.increment()
 
         return view
     }
@@ -39,17 +40,15 @@ class PlaylistFragment : Fragment() {
     private fun setupObservers(view: View) {
         viewModel.loader.observe(this as LifecycleOwner) { loading ->
             view.findViewById<ProgressBar>(R.id.loader).visibility = when (loading) {
-                true ->  View.VISIBLE
+                true -> View.VISIBLE
                 else -> View.GONE
             }
-
         }
 
         viewModel.playlists.observe(this as LifecycleOwner) { playlists ->
             if (playlists.getOrNull() != null) {
                 setupList(view.findViewById(R.id.playlists_list), playlists.getOrNull()!!)
             }
-
         }
     }
 
@@ -59,20 +58,16 @@ class PlaylistFragment : Fragment() {
     ) {
         with(view) {
             layoutManager = LinearLayoutManager(context)
-            adapter = MyPlaylistRecyclerViewAdapter(playlists)
+            adapter = MyPlaylistRecyclerViewAdapter(playlists) { id ->
+                val action =
+                    PlaylistFragmentDirections.actionPlaylistFragmentToPlaylistDetailFragment(id)
+                findNavController().navigate(action)
+            }
         }
-        countingIdlingResource.decrement()
+        TestIdlingResource.decrement()
     }
 
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistViewModel::class.java]
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(countingIdlingResource: CountingIdlingResource) =
-            PlaylistFragment().apply {
-                this.countingIdlingResource = countingIdlingResource
-            }
     }
 }
