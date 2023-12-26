@@ -10,15 +10,19 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.tddmasterclass.R
+import com.example.tddmasterclass.utils.TestIdlingResource
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PlaylistDetailFragment : Fragment() {
 
     private lateinit var viewModel: PlaylistDetailsViewModel
-    private lateinit var viewModelFactory: PlaylistDetailsViewModelFactory
 
-    val args: PlaylistDetailFragmentArgs by navArgs()
+    @Inject
+    lateinit var viewModelFactory: PlaylistDetailsViewModelFactory
+
+    private val args: PlaylistDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,11 +33,13 @@ class PlaylistDetailFragment : Fragment() {
 
         val id = args.playlistid
 
+        TestIdlingResource.increment()
+
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistDetailsViewModel::class.java]
 
-        viewModel.getPlaylistDetails(id)
-
         observeLiveData(view)
+
+        viewModel.getPlaylistDetails(id)
 
         return view
     }

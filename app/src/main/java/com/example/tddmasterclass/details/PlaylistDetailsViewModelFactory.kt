@@ -2,7 +2,6 @@ package com.example.tddmasterclass.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.tddmasterclass.PlaylistDetailsService
 import javax.inject.Inject
 
 class PlaylistDetailsViewModelFactory @Inject constructor(

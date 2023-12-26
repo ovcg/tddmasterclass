@@ -1,7 +1,5 @@
 package com.example.tddmasterclass.details
 
-import com.example.tddmasterclass.PlaylistDetailsAPI
-import com.example.tddmasterclass.PlaylistDetailsService
 import com.example.tddmasterclass.utils.BaseUnitTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
