@@ -32,11 +32,16 @@ class PlaylistFragment : Fragment() {
 
         setupViewModel()
 
+
+        return view
+    }
+
+    private fun setupObservers(view: View) {
         viewModel.loader.observe(this as LifecycleOwner) { loading ->
             view.findViewById<ProgressBar>(R.id.loader).visibility = when (loading) {
-               true ->  View.VISIBLE
-               else -> View.GONE
-           }
+                true ->  View.VISIBLE
+                else -> View.GONE
+            }
 
         }
 
@@ -46,7 +51,6 @@ class PlaylistFragment : Fragment() {
             }
 
         }
-        return view
     }
 
     private fun setupList(
