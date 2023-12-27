@@ -20,17 +20,17 @@ abstract class BaseUITest {
 
     @get:Rule
     val mActivityRule = ActivityTestRule(MainActivity::class.java)
-    private lateinit var signInIdlingResource: IdlingResource
+    private lateinit var idlingResource: IdlingResource
 
     @Before
     open fun registerIdlingResource() {
-        signInIdlingResource = TestIdlingResource.countingIdlingResource
-        IdlingRegistry.getInstance().register(signInIdlingResource)
+        idlingResource = TestIdlingResource.countingIdlingResource
+        IdlingRegistry.getInstance().register(idlingResource)
     }
 
     @After
     fun tearDown() {
-        IdlingRegistry.getInstance().unregister(signInIdlingResource)
+        IdlingRegistry.getInstance().unregister(idlingResource)
     }
 
     fun nthChildOf(parentMatcher: Matcher<View>, childPosition: Int): Matcher<View> {

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.tddmasterclass.R
 import com.example.tddmasterclass.utils.TestIdlingResource
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -40,6 +41,8 @@ class PlaylistDetailFragment : Fragment() {
 
         observeLoader(view)
 
+        TestIdlingResource.increment()
+
         viewModel.getPlaylistDetails(id)
 
         return view
@@ -52,7 +55,14 @@ class PlaylistDetailFragment : Fragment() {
                     playlistDetails.getOrNull()!!.name
                 view.findViewById<TextView>(R.id.playlist_details).text =
                     playlistDetails.getOrNull()!!.details
+            } else {
+                Snackbar.make(
+                    view.findViewById(R.id.playlist_details_root),
+                    R.string.generic_error,
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
+            TestIdlingResource.decrement()
         }
     }
 

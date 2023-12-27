@@ -1,19 +1,14 @@
 package com.example.tddmasterclass.details
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.tddmasterclass.BaseUITest
 import com.example.tddmasterclass.R
-import com.example.tddmasterclass.utils.TestIdlingResource
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import org.hamcrest.CoreMatchers
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,7 +19,7 @@ class PlaylistDetailsFeature : BaseUITest() {
 
     @Test
     fun displayPlaylistNameAndDetails() {
-        navigateToPlaylistDetails()
+        navigateToPlaylistDetails(0)
 
         assertDisplayed("Hard Rock Cafe")
 
@@ -32,29 +27,20 @@ class PlaylistDetailsFeature : BaseUITest() {
     }
 
     @Test
-    fun displayLoaderWhileFetchingPlaylistDetails() {
-        navigateToPlaylistDetails()
+    fun displaysErrorMethodWhenNetworkFails() {
+        navigateToPlaylistDetails(1)
 
-        IdlingRegistry.getInstance().unregister(TestIdlingResource.countingIdlingResource)
-
-        onView(withId(R.id.details_loader)).check(matches(isDisplayed()))
+        assertDisplayed(R.string.generic_error)
     }
 
-    @Test
-    fun hideLoader() {
-        navigateToPlaylistDetails()
-
-        onView(withId(R.id.details_loader)).check(matches(isDisplayed()))
-    }
-
-    private fun navigateToPlaylistDetails() {
+    private fun navigateToPlaylistDetails(position: Int) {
         onView(
             CoreMatchers.allOf(
                 withId(R.id.playlist_image),
                 isDescendantOfA(
                     nthChildOf(
                         withId(R.id.playlists_list),
-                        0
+                        position
                     )
                 )
             )
