@@ -14,6 +14,7 @@ import org.mockito.Mockito.`when`
 
 class PlaylistDetailsViewModelShould : BaseUnitTest() {
 
+    private lateinit var viewModel: PlaylistDetailsViewModel
     private val service: PlaylistDetailsService = mock()
     private val id = "1"
     private val playlistDetails: PlaylistDetails = mock()
@@ -23,7 +24,7 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
 
     @Test
     fun getPlaylistDetailsFromService() = runBlockingTest {
-        val viewModel = mockSuccessfulCase()
+        viewModel = mockSuccessfulCase()
         viewModel.getPlaylistDetails(id)
 
         verify(service, times(1)).fetchPlaylistDetails(id)
@@ -32,7 +33,7 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
 
     @Test
     fun emitsPlaylistDetailsFromService() = runBlockingTest {
-        val viewModel = mockSuccessfulCase()
+        viewModel = mockSuccessfulCase()
 
         viewModel.getPlaylistDetails(id)
 
@@ -41,7 +42,7 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
 
     @Test
     fun emitErrorWhenServiceFails() = runBlockingTest {
-        val viewModel = mockErrorCase()
+        viewModel = mockErrorCase()
 
         viewModel.getPlaylistDetails(id)
         assertEquals(error, viewModel.playlistDetails.getValueForTest())
@@ -49,11 +50,10 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
 
     @Test
     fun showSpinnerWhileLoading() = runBlockingTest {
-        val viewModel = mockSuccessfulCase()
-
-        viewModel.getPlaylistDetails(id)
+        viewModel = mockSuccessfulCase()
 
         viewModel.loader.captureValues {
+            viewModel.getPlaylistDetails(id)
             viewModel.playlistDetails.getValueForTest()
             assertEquals(true, values[0])
         }
@@ -61,11 +61,11 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
 
     @Test
     fun closeLoaderAfterPlaylistDetailsLoad() = runBlockingTest {
-        val viewModel = mockSuccessfulCase()
-
-        viewModel.getPlaylistDetails(id)
+        viewModel = mockSuccessfulCase()
 
         viewModel.loader.captureValues {
+            viewModel.getPlaylistDetails(id)
+            viewModel.playlistDetails.getValueForTest()
             assertEquals(false, values.last())
         }
     }
