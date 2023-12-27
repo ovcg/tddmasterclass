@@ -27,7 +27,7 @@ class PlaylistDetailsFeature : BaseUITest() {
     }
 
     @Test
-    fun displaysErrorMethodWhenNetworkFails() {
+    fun displaysErrorMessageWhenNetworkFails() {
         navigateToPlaylistDetails(1)
 
         assertDisplayed(R.string.generic_error)
